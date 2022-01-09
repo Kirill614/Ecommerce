@@ -3,6 +3,7 @@ package kirill.ecommerce.service;
 import kirill.ecommerce.models.dto.ProductDto;
 import kirill.ecommerce.models.dto.ProductVariantDto;
 import kirill.ecommerce.models.entity.Product;
+import kirill.ecommerce.models.entity.ProductVariant;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -18,5 +19,9 @@ public interface ProductService {
                                                 String category, Float minPrice, Float maxPrice);
 
     List<ProductDto> searchProduct(String keyword, int page, int size);
+
+    void addProductSupplier(Product product, String supplierUsername, String category);
+
+    void addProductVariant(int productId, ProductVariant productVariant);
 
 }

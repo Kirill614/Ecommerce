@@ -43,7 +43,7 @@ public class AuthController {
     }
 
     @PostMapping("/loginCustomer")
-    ResponseEntity<?> authenticate(@Valid @RequestBody SigninRequest request) {
+    ResponseEntity<?> authenticateCustomer(@Valid @RequestBody SigninRequest request) {
         return authService.authenticate(request);
     }
 

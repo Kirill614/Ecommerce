@@ -20,4 +20,8 @@ public class CustomerDetailsServiceImpl implements UserDetailsService {
 
         return CustomerDetailsImpl.build(customer);
     }
+
+    public boolean existsByUsername(String username){
+        return repository.existsByUsername(username);
+    }
 }

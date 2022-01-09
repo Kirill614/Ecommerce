@@ -6,8 +6,12 @@ import kirill.ecommerce.converter.ProductVariantConverter;
 import kirill.ecommerce.models.dto.ProductDto;
 import kirill.ecommerce.models.dto.ProductVariantDto;
 import kirill.ecommerce.models.entity.Product;
+import kirill.ecommerce.models.entity.ProductCategory;
 import kirill.ecommerce.models.entity.ProductVariant;
+import kirill.ecommerce.models.entity.Supplier;
+import kirill.ecommerce.repository.ProductRepository;
 import kirill.ecommerce.repository.ProductVariantsRepository;
+import kirill.ecommerce.service.supplier.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,6 +36,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductVariantsRepository productVariantRepository;
+
+    @Autowired
+    SupplierService supplierService;
+
+    @Autowired
+    ProductCategoryService categoryService;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @Override
     public ProductDto findByName(String name) {
@@ -80,6 +93,26 @@ public class ProductServiceImpl implements ProductService {
                 .stream()
                 .map(productConverter::convertFromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addProductSupplier(Product product, String supplierUsername, String categoryName){
+        Supplier supplier = supplierService.findSupplierByUsername(supplierUsername);
+        ProductCategory category = categoryService.findByName(categoryName);
+        product.setCategory(category);
+        product.setSupplier(supplier);
+        productRepository.save(product);
+        supplier.getProducts().add(product);
+        supplierService.saveSupplier(supplier);
+    }
+
+    @Override
+    public void addProductVariant(int productId, ProductVariant variant){
+        Product product = findById(productId);
+        variant.setProduct(product);
+        productVariantRepository.save(variant);
+        product.getProductVariantList().add(variant);
+        productRepository.save(product);
     }
 
 }

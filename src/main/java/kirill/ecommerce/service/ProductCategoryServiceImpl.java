@@ -29,7 +29,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService{
     @Override
     public ProductCategory findByName(String name){
         ProductCategory category = productCategoryCacheService.findByName(name);
-        //return categoryConverter.convertFromEntity(category);
         return category;
     }
+
+
 }

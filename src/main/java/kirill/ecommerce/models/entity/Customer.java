@@ -28,10 +28,14 @@ public class Customer {
     @Column(name = "mail")
     private String mail;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "customer_role", joinColumns = @JoinColumn(name = "customer_id")
             , inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     public Customer(String username, String password, String mail, Set<Role> roles) {
         this.username = username;
@@ -80,5 +84,13 @@ public class Customer {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Cart getCart(){
+        return this.cart;
+    }
+
+    public void setCart(Cart cart){
+        this.cart = cart;
     }
 }

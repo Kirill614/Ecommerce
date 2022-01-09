@@ -4,9 +4,11 @@ import kirill.ecommerce.converter.ProductConverter;
 import kirill.ecommerce.converter.ProductVariantConverter;
 import kirill.ecommerce.models.dto.ProductDto;
 import kirill.ecommerce.models.dto.ProductVariantDto;
+import kirill.ecommerce.models.request.AddToCartRequest;
 import kirill.ecommerce.models.request.SearchRequest;
 import kirill.ecommerce.repository.ProductRepository;
 import kirill.ecommerce.repository.ProductVariantsRepository;
+import kirill.ecommerce.service.Cart.CartServiceImpl;
 import kirill.ecommerce.service.ProductCategoryService;
 import kirill.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +23,10 @@ import java.util.List;
 public class CustomerController {
 
     @Autowired
-    ProductConverter productConverter;
-
-    @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    ProductVariantsRepository productVariantRepository;
-
-    @Autowired
-    ProductCategoryService categoryService;
-
-    @Autowired
     ProductService productService;
 
     @Autowired
-    ProductVariantConverter productVariantConverter;
+    CartServiceImpl cartService;
 
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/productVariants/filter")
@@ -61,8 +51,19 @@ public class CustomerController {
     @GetMapping("/all")
     ResponseEntity<?> getAllProducts() {
         List<ProductDto> products = productService.findAllProducts();
-
         return ResponseEntity.ok(products);
     }
+
+//    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+//    @PostMapping("/addToCart")
+//    ResponseEntity<?> addToCart(@RequestBody AddToCartRequest request){
+//        try{
+//            cartService.addToCart(request.getProductVariantId(), request.getAmount());
+//            return ResponseEntity.ok("Product was added to cart!");
+//        } catch(Exception e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
 }

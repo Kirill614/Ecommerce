@@ -29,7 +29,7 @@ public class Supplier {
     @OneToMany
     private List<Product> products;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "supplier_role",
             joinColumns = @JoinColumn(name = "supplier_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
