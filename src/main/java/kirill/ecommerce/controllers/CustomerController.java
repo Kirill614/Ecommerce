@@ -54,16 +54,4 @@ public class CustomerController {
         return ResponseEntity.ok(products);
     }
 
-//    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-//    @PostMapping("/addToCart")
-//    ResponseEntity<?> addToCart(@RequestBody AddToCartRequest request){
-//        try{
-//            cartService.addToCart(request.getProductVariantId(), request.getAmount());
-//            return ResponseEntity.ok("Product was added to cart!");
-//        } catch(Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-
 }

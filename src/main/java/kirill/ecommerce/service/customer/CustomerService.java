@@ -4,4 +4,5 @@ import kirill.ecommerce.models.entity.Customer;
 
 public interface CustomerService {
     Customer findCustomerById(int id);
+    Customer getCustomer();
 }
