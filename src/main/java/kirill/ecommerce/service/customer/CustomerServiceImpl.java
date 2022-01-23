@@ -9,8 +9,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomerServiceImpl implements CustomerService{
+
+    private final CustomerRepository repository;
+
     @Autowired
-    CustomerRepository repository;
+    public CustomerServiceImpl(CustomerRepository customerRepository){
+        this.repository = customerRepository;
+    }
+
 
     @Override
     public Customer findCustomerById(int id){
@@ -21,5 +27,15 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer getCustomer(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return repository.findByUsername(auth.getPrincipal().toString());
+    }
+
+    @Override
+    public boolean existsByUsername(String username){
+        return repository.existsByUsername(username);
+    }
+
+    @Override
+    public Customer findCustomerByUsername(String username){
+        return repository.findByUsername(username);
     }
 }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
-public class JwtHelper {
+public class JwtUtils {
     @Value("${ecommerce.kirill.jwtSecret}")
     private String JWT_SECRET;
     private static final int JWT_VALIDITY = 500000000;
@@ -39,7 +39,7 @@ public class JwtHelper {
     }
 
     public String parseUsername(String authToken){
-        return Jwts.parser().setSigningKey(JWT_SECRET).setSigningKey(JWT_SECRET)
+        return Jwts.parser().setSigningKey(JWT_SECRET)
                .parseClaimsJws(authToken).getBody().getSubject();
 //        try{
 //            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws()

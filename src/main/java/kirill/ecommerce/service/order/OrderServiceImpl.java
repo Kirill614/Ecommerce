@@ -18,12 +18,17 @@ import java.util.Objects;
 
 @Component
 public class OrderServiceImpl implements OrderService{
-    @Autowired
-    CustomerService customerService;
-    @Autowired
-    OrderRepository orderRepository;
-    @Autowired
-    CartService cartService;
+    private final CustomerService customerService;
+    private final OrderRepository orderRepository;
+    private final CartService cartService;
+
+    public OrderServiceImpl(CustomerService customerService,
+                            OrderRepository orderRepository,
+                            CartService cartService){
+        this.customerService = customerService;
+        this.orderRepository = orderRepository;
+        this.cartService = cartService;
+    }
     @Override
     public String postOrder(PostOrderRequest request){
         Customer customer = customerService.getCustomer();

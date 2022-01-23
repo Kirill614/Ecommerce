@@ -47,7 +47,7 @@ public class CustomerDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     @Override
@@ -68,5 +68,21 @@ public class CustomerDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }

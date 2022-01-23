@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import kirill.ecommerce.models.dto.CartItemDto;
 import kirill.ecommerce.models.request.AddToCartRequest;
 import kirill.ecommerce.models.request.ConfirmCartRequest;
+import kirill.ecommerce.service.Cart.CartService;
 import kirill.ecommerce.service.Cart.CartServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/cart")
 public class CartController {
-
     @Autowired
-    CartServiceImpl cartService;
+    private CartService cartService;
 
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PostMapping(value = "/add")

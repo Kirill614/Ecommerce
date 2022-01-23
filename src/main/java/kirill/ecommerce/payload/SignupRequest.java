@@ -5,14 +5,20 @@ import java.util.Set;
 public class SignupRequest {
     private String username;
     private String password;
+    private String confirmPassword;
     private String mail;
     private String role;
 
-    public SignupRequest(String username, String password, String mail) {
+    public SignupRequest(String username, String password, String confirmPassword,
+                         String mail, String role) {
         this.username = username;
         this.password = password;
+        this.password = password;
         this.mail = mail;
+        this.role = role;
     }
+
+    public SignupRequest(){}
 
     public String getUsername() {
         return username;
@@ -28,6 +34,14 @@ public class SignupRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getMail() {

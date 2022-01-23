@@ -17,15 +17,18 @@ import java.util.stream.Collectors;
 @CacheConfig(cacheNames = "product")
 @Component
 public class ProductCacheServiceImpl implements ProductCacheService{
+    private final ProductRepository productRepository;
+    private final ProductVariantsRepository productVariantRepository;
+    private final ProductVariantConverter productVariantConverter;
 
     @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    ProductVariantsRepository productVariantRepository;
-
-    @Autowired
-    ProductVariantConverter productVariantConverter;
+    public ProductCacheServiceImpl(ProductRepository productRepository,
+                                    ProductVariantsRepository productVariantRepository,
+                                    ProductVariantConverter productVariantConverter){
+        this.productRepository = productRepository;
+        this.productVariantRepository = productVariantRepository;
+        this.productVariantConverter = productVariantConverter;
+    }
 
     @Override
     @Cacheable

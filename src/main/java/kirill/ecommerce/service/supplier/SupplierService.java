@@ -6,4 +6,5 @@ public interface SupplierService {
     Supplier findSupplierById(Long id);
     Supplier findSupplierByUsername(String username);
     void saveSupplier(Supplier supplier);
+    boolean existsByUsername(String username);
 }

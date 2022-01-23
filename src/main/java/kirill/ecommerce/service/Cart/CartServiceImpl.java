@@ -23,27 +23,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Component
 public class CartServiceImpl implements CartService {
 
-    @Autowired
-    CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+    private final ProductVariantsRepository variantsRepository;
+    private final CartRepository cartRepository;
+    private final CustomerServiceImpl customerService;
 
     @Autowired
-    ProductVariantsRepository variantsRepository;
-
-    @Autowired
-    CartRepository cartRepository;
-
-    @Autowired
-    CustomerServiceImpl customerService;
+    public CartServiceImpl(CustomerRepository customerRepository,
+                           ProductVariantsRepository variantsRepository,
+                           CartRepository cartRepository,
+                           CustomerServiceImpl customerService){
+        this.customerRepository = customerRepository;
+        this.variantsRepository = variantsRepository;
+        this.cartRepository = cartRepository;
+        this.customerService = customerService;
+    }
 
     @Override
     public String addToCart(Long productVariantId, int amount) throws Exception {
         Customer customer = customerService.getCustomer();
         Cart cart = customer.getCart();
-
 
         ProductVariant productVariant = variantsRepository.findById(productVariantId)
                 .orElseThrow(() -> new Exception("product variant not found"));
@@ -51,7 +56,6 @@ public class CartServiceImpl implements CartService {
         if (productVariant.getStock() < amount) {
             throw new Exception("amount");
         }
-
         if (Objects.nonNull(cart) && Objects.nonNull(cart.getCartItems()) && !cart.getCartItems().isEmpty()) {
             Optional<CartItem> cartItem = cart.getCartItems()
                     .stream()

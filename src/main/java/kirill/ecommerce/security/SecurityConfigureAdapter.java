@@ -2,8 +2,6 @@ package kirill.ecommerce.security;
 
 import kirill.ecommerce.security.AuthEntryPoint;
 import kirill.ecommerce.security.AuthJwtFilter;
-import kirill.ecommerce.security.providers.CustomerAuthenticationProvider;
-import kirill.ecommerce.security.providers.SupplierAuthenticationProvider;
 import kirill.ecommerce.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

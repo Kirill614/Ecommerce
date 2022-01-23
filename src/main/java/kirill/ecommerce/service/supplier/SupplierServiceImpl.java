@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SupplierServiceImpl implements SupplierService {
+    private final SupplierRepository repository;
 
-    @Autowired
-    SupplierRepository repository;
+    public SupplierServiceImpl(SupplierRepository supplierRepository){
+        this.repository = supplierRepository;
+    }
 
     @Override
     public Supplier findSupplierById(Long id) {
@@ -24,5 +26,10 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public void saveSupplier(Supplier supplier) {
         repository.save(supplier);
+    }
+
+    @Override
+    public boolean existsByUsername(String username){
+        return repository.existsByUsername(username);
     }
 }

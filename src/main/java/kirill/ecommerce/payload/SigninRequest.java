@@ -3,7 +3,7 @@ package kirill.ecommerce.payload;
 public class SigninRequest {
     private String username;
     private String password;
-    private String role;
+    //private String role;
 
     public String getUsername() {
         return username;
@@ -26,11 +26,13 @@ public class SigninRequest {
         this.password = password;
     }
 
-    public String getRole(){
-        return this.role;
-    }
+    public SigninRequest(){}
 
-    public void setRole(String role){
-        this.role = role;
-    }
+//    public String getRole(){
+//        return this.role;
+//    }
+//
+//    public void setRole(String role){
+//        this.role = role;
+//    }
 }

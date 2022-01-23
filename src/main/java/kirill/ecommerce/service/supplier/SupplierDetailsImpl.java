@@ -76,7 +76,7 @@ public class SupplierDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.mail;
+        return this.username;
     }
 
     @Override

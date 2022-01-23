@@ -2,53 +2,55 @@ package kirill.ecommerce.controllers;
 
 import kirill.ecommerce.payload.SigninRequest;
 import kirill.ecommerce.payload.SignupRequest;
-import kirill.ecommerce.repository.CustomerRepository;
-import kirill.ecommerce.repository.SupplierRepository;
-import kirill.ecommerce.repository.UserRepository;
-import kirill.ecommerce.security.JwtHelper;
 import kirill.ecommerce.service.AuthService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
-@RestController
-@RequestMapping("/api/auth")
+@Controller
 public class AuthController {
 
-    @Autowired
-    AuthService authService;
+    private final AuthService authService;
+    private final Validator validator;
 
     @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
-    SupplierRepository supplierRepository;
-
-    Logger log = LoggerFactory.getLogger(Autowired.class);
-
-    @PostMapping("/signup")
-    ResponseEntity<?> registration(@RequestBody SignupRequest request) throws Exception {
-        if (customerRepository.existsByUsername(request.getUsername()) ||
-                supplierRepository.existsByUsername(request.getUsername()))
-            return ResponseEntity.ok("This username already taken");
-        if (customerRepository.existsByPassword(request.getPassword()) ||
-                supplierRepository.existsByPassword(request.getPassword()))
-            return ResponseEntity.ok("This password already taken");
-        return authService.registration(request);
+    public AuthController(AuthService authService,
+                          @Qualifier("valid") Validator validator){
+        this.authService = authService;
+        this.validator = validator;
     }
 
-    @PostMapping("/loginCustomer")
-    ResponseEntity<?> authenticateCustomer(@Valid @RequestBody SigninRequest request) {
-        return authService.authenticate(request);
+    @PostMapping("/reg")
+    String registration(@ModelAttribute("signup") SignupRequest request,
+                                   BindingResult bindingResult) throws Exception {
+      validator.validate(request, bindingResult);
+      if(bindingResult.hasErrors()) return "redirect:/registration?error";
+      authService.registration(request);
+      return "redirect:/";
     }
 
-    @PostMapping("/loginSupplier")
-        ResponseEntity<?> authenticateSupplier(@Valid @RequestBody SigninRequest request){
-        return authService.authenticate(request);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    String loginUser(@ModelAttribute("signin") SigninRequest request, Model model) throws Exception {
+        authService.authenticate(request);
+        return "redirect:/customer";
+    }
+
+    @GetMapping("/customer")
+    String showCustomerPage() {
+        return "customer";
+    }
+
+    @ModelAttribute("signin")
+    public void addAttributes(Model model) {
+        model.addAttribute("signin", new SigninRequest());
+    }
+
+    @ModelAttribute("signup")
+    public void addRegAttr(Model model) {
+        model.addAttribute("signup", new SignupRequest());
     }
 }
