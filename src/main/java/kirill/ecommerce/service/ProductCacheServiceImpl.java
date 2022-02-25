@@ -1,5 +1,6 @@
 package kirill.ecommerce.service;
 
+import kirill.ecommerce.ProductSpecs;
 import kirill.ecommerce.converter.ProductVariantConverter;
 import kirill.ecommerce.models.entity.Product;
 import kirill.ecommerce.models.entity.ProductVariant;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -54,5 +56,12 @@ public class ProductCacheServiceImpl implements ProductCacheService{
         List<Product> productVariants = productRepository.findAllByNameContainingIgnoreCase(keyword, pageable);
 
         return productVariants;
+    }
+
+    @Override
+    @Cacheable
+    public List<Product> findByCategory(String category){
+       Specification<Product> specs = Specification.where(ProductSpecs.category(category));
+       return productRepository.findAll(specs);
     }
 }

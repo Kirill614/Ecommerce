@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/static/css/categories.css" th:href="@{/css/categories.css}" rel="stylesheet">
+    <link href="/static/css/customer.css" th:href="@{/css/customer.css}" rel="stylesheet">
+</head>
+<body>
+<div class="topnav">
+    <a class="active" href="http://localhost:8080/login">Home</a>
+    <a href="http://localhost:8080/catalog">Shop</a>
+    <a href="#">Logout</a>
+    <a href="#">Cart</a>
+</div>
+
+<h1 class = "categories">Categories</h1>
+<ol class="rounded">
+    <li><a href="http://localhost:8080/product/byCategory?category=t-shirt">T-shirt</a></li>
+    <li><a href="http://localhost:8080/product/byCategory?category=sneakers">Sneakers</a></li>
+    <li><a href="http://localhost:8080/product/byCategory?category=down jacket">Down jackets</a></li>
+</ol>
+<ul>
+  <li th:each="product:${products}" th:text="${product.name}"></li>
+</ul>
+</body>
+</html>

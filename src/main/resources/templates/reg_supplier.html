@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container-fluid text-center">
+
+    <div th:if="${param.error}">
+        <div class="alert alert-danger">
+            There was some error in registration.
+        </div>
+    </div>
+
+    <form th:action="@{/reg}" th:object="${signin}" method="post" style="max-width: 350px; margin: 0 auto;">
+
+        <div class="border border-secondary p-3 rounded">
+            <p></p>
+            <p>
+                <input name="username" class="form-control" placeholder="Username" required autofocus/>
+            </p>
+            <p>
+                <input type="password" name="password" class="form-control" placeholder="Password" required />
+            </p>
+            <p>
+                <input type="password" name="confirmPassword" class="form-control" placeholder="Confirm password" required />
+            </p>
+            <p>
+                <input type="mail" name="mail" class="form-control" placeholder="Mail" required />
+            </p>
+
+            <p>
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </p>
+        </div>
+    </form>
+</div>
+</body>
+</html>

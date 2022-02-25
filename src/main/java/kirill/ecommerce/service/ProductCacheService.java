@@ -11,4 +11,5 @@ public interface ProductCacheService {
     Product findById(int id);
     List<Product> findAllProducts();
     List<Product> searchProduct(String keyword, Pageable pageable);
+    List<Product> findByCategory(String category);
 }

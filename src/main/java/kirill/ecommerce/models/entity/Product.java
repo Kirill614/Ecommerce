@@ -26,7 +26,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private ProductCategory category;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     //@JoinColumn(name = "productVariant_id")
     private List<ProductVariant> productVariants;
 

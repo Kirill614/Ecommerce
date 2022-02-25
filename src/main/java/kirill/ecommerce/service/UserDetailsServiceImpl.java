@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component("userService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -20,21 +22,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     public UserDetailsServiceImpl(CustomerService customerService,
-                                  SupplierService supplierService){
+                                  SupplierService supplierService) {
         this.customerService = customerService;
         this.supplierService = supplierService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-         if(customerService.existsByUsername(username)){
-             Customer customer = customerService.findCustomerByUsername(username);
-             return CustomerDetailsImpl.build(customer);
-         }
-         if(supplierService.existsByUsername(username)) {
-             Supplier supplier = supplierService.findSupplierByUsername(username);
-             return SupplierDetailsImpl.build(supplier);
-         }
-         return null;
+        if (customerService.existsByUsername(username)) {
+            Customer customer = customerService.findCustomerByUsername(username);
+            return CustomerDetailsImpl.build(customer);
+        }
+        if (supplierService.existsByUsername(username)) {
+            Supplier supplier = supplierService.findSupplierByUsername(username);
+            return SupplierDetailsImpl.build(supplier);
+        }
+        return null;
     }
+
 }

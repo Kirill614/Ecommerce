@@ -5,6 +5,8 @@ import kirill.ecommerce.models.entity.Supplier;
 public interface SupplierService {
     Supplier findSupplierById(Long id);
     Supplier findSupplierByUsername(String username);
-    void saveSupplier(Supplier supplier);
+    Supplier saveSupplier(Supplier supplier);
     boolean existsByUsername(String username);
+    Supplier getSupplier();
+    boolean existsByMail(String mail);
 }

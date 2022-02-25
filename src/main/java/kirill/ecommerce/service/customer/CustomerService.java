@@ -7,4 +7,5 @@ public interface CustomerService {
     Customer getCustomer();
     boolean existsByUsername(String username);
     Customer findCustomerByUsername(String username);
+    boolean existsByMail(String mail);
 }

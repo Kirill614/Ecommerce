@@ -11,9 +11,19 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("/registration")
-    String viewRegPage(){
-        return "reg";
+    @GetMapping("/registration/customer")
+    String viewRegCustomerPage(){
+        return "reg_customer";
+    }
+
+    @GetMapping("/registration/supplier")
+    String viewRegSupplierPage(){
+        return "reg_supplier";
+    }
+
+    @GetMapping("/catalog")
+    String viewCatalog(){
+        return "catalog";
     }
 
 }

@@ -26,7 +26,7 @@ public class Supplier {
     @Column(name = "mail")
     private String mail;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Product> products;
 
     @OneToMany(fetch = FetchType.EAGER)

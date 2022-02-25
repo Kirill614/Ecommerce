@@ -9,6 +9,8 @@ import kirill.ecommerce.models.entity.Product;
 import kirill.ecommerce.models.entity.ProductCategory;
 import kirill.ecommerce.models.entity.ProductVariant;
 import kirill.ecommerce.models.entity.Supplier;
+import kirill.ecommerce.models.request.AddProductRequest;
+import kirill.ecommerce.models.request.ProductVariantRequest;
 import kirill.ecommerce.repository.ProductRepository;
 import kirill.ecommerce.repository.ProductVariantsRepository;
 import kirill.ecommerce.service.supplier.SupplierService;
@@ -16,10 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -47,15 +49,13 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
 
     @Override
-    public ProductDto findByName(String name) {
-        Product product = cacheService.findByName(name);
-        return productConverter.convertFromEntity(product);
+    public Product findByName(String name) {
+        return cacheService.findByName(name);
     }
 
     @Override
-    public List<ProductDto> findAllProducts() {
-        return cacheService.findAllProducts().stream().map(productConverter::convertFromEntity)
-                .collect(Collectors.toList());
+    public List<Product> findAllProducts() {
+        return cacheService.findAllProducts();
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductVariantDto> findProductVariants(int page, int size, String sort,
+    public List<ProductVariant> findProductVariants(int page, int size, String sort,
                                                     String category, Float minPrice, Float maxPrice){
         PageRequest pageRequest;
         if(Objects.nonNull(sort) && !sort.isEmpty()){
@@ -79,40 +79,48 @@ public class ProductServiceImpl implements ProductService {
                 .and(ProductVariantSpecs.minPrice(minPrice))
                 .and(ProductVariantSpecs.maxPrice(maxPrice)));
 
-        return productVariantRepository.findAll(combinations, pageRequest)
-                .stream()
-                .map(variantConverter::convertFromEntity)
-                .collect(Collectors.toList());
+        return productVariantRepository.findAll(combinations, pageRequest).getContent();
     }
 
     @Override
-    public List<ProductDto> searchProduct(String keyword, int page, int size){
+    public List<Product> searchProduct(String keyword, int page, int size){
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return cacheService.searchProduct(keyword, pageRequest)
-                .stream()
-                .map(productConverter::convertFromEntity)
-                .collect(Collectors.toList());
+        return cacheService.searchProduct(keyword, pageRequest);
     }
 
     @Override
-    public void addProductSupplier(Product product, String supplierUsername, String categoryName){
-        Supplier supplier = supplierService.findSupplierByUsername(supplierUsername);
-        ProductCategory category = categoryService.findByName(categoryName);
+    public Supplier addProductSupplier(AddProductRequest request){
+        Supplier supplier = supplierService.getSupplier();
+        ProductCategory category = categoryService.findByName(request.getProductDto().getCategory().getName());
+        Product product = productConverter.convertFromDto(request.getProductDto());
         product.setCategory(category);
         product.setSupplier(supplier);
-        productRepository.save(product);
+        if(supplier.getProducts() == null) supplier.setProducts(new ArrayList<Product>());
         supplier.getProducts().add(product);
-        supplierService.saveSupplier(supplier);
+        return supplierService.saveSupplier(supplier);
+    }
+
+//    @Override
+//    public void addProductVariant(int productId, ProductVariant variant){
+//        Product product = findById(productId);
+//        variant.setProduct(product);
+//        //productVariantRepository.save(variant);
+//        product.getProductVariantList().add(variant);
+//        productRepository.save(product);
+//    }
+
+    @Override
+    public Product addProductVariant(ProductVariantRequest request){
+        ProductVariant productVariant = variantConverter.convertFromDto(request.getProductVariantDto());
+        Product product = findById(request.getProductId());
+        productVariant.setProduct(product);
+        product.getProductVariantList().add(productVariant);
+        return productRepository.save(product);
     }
 
     @Override
-    public void addProductVariant(int productId, ProductVariant variant){
-        Product product = findById(productId);
-        variant.setProduct(product);
-        productVariantRepository.save(variant);
-        product.getProductVariantList().add(variant);
-        productRepository.save(product);
+    public List<Product> findByCategory(String category){
+        return cacheService.findByCategory(category);
     }
-
 }

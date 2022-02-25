@@ -38,4 +38,9 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer findCustomerByUsername(String username){
         return repository.findByUsername(username);
     }
+
+    @Override
+    public boolean existsByMail(String mail) {
+        return repository.existsByMail(mail);
+    }
 }

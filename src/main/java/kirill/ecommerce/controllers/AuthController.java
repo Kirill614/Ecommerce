@@ -2,7 +2,7 @@ package kirill.ecommerce.controllers;
 
 import kirill.ecommerce.payload.SigninRequest;
 import kirill.ecommerce.payload.SignupRequest;
-import kirill.ecommerce.service.AuthService;
+import kirill.ecommerce.service.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -14,28 +14,39 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
     private final Validator validator;
 
     @Autowired
-    public AuthController(AuthService authService,
-                          @Qualifier("valid") Validator validator){
-        this.authService = authService;
+    public AuthController(AuthServiceImpl authServiceImpl,
+                          @Qualifier("valid") Validator validator) {
+        this.authServiceImpl = authServiceImpl;
         this.validator = validator;
     }
 
-    @PostMapping("/reg")
-    String registration(@ModelAttribute("signup") SignupRequest request,
-                                   BindingResult bindingResult) throws Exception {
-      validator.validate(request, bindingResult);
-      if(bindingResult.hasErrors()) return "redirect:/registration?error";
-      authService.registration(request);
-      return "redirect:/";
+    @PostMapping("register/customer")
+    String regCustomer(@ModelAttribute("signup") SignupRequest request,
+                        BindingResult result){
+        validator.validate(request, result);
+        if(result.hasErrors()) return "redirect:/403";
+        authServiceImpl.regCustomer(request);
+        System.out.println("registered successfully");
+        return "redirect:/customer";
+    }
+
+    @PostMapping("register/supplier")
+    String regSupplier(@ModelAttribute("signup") SignupRequest request,
+                                  BindingResult result){
+        validator.validate(request, result);
+        if(result.hasErrors()) return "redirect:/403";
+        authServiceImpl.regSupplier(request);
+        System.out.println("registered successfully");
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     String loginUser(@ModelAttribute("signin") SigninRequest request, Model model) throws Exception {
-        authService.authenticate(request);
+        authServiceImpl.authenticate(request);
         return "redirect:/customer";
     }
 

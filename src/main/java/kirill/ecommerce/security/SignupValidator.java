@@ -1,6 +1,8 @@
 package kirill.ecommerce.security;
 
 import kirill.ecommerce.payload.SignupRequest;
+import kirill.ecommerce.service.customer.CustomerService;
+import kirill.ecommerce.service.supplier.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,9 +18,18 @@ public class SignupValidator implements Validator {
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 20;
 
+
+    private final UserDetailsService userService;
+    private final CustomerService customerService;
+    private final SupplierService supplierService;
+
     @Autowired
-    @Qualifier("userService")
-    private UserDetailsService userService;
+    public SignupValidator(@Qualifier("userService")UserDetailsService userDetailService,
+                           CustomerService customerService, SupplierService supplierService){
+        this.userService = userDetailService;
+        this.customerService = customerService;
+        this.supplierService = supplierService;
+    }
 
     @Override
     public boolean supports(Class<?> aClass){
@@ -41,6 +52,12 @@ public class SignupValidator implements Validator {
         if(request.getPassword().length() < MIN_PASSWORD_LENGTH ||
                 request.getPassword().length() > MAX_PASSWORD_LENGTH){
             errors.rejectValue("password", "password length");
+        }
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mail", "mail is empty");
+        String mail = request.getMail();
+        if(customerService.existsByMail(mail) || supplierService.existsByMail(mail)){
+            errors.rejectValue("mail", "already taken");
         }
 
         if(!request.getPassword().equals(request.getConfirmPassword())){

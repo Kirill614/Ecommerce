@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <form th:action="@{/reg}" th:object="${signin}" method="post" style="max-width: 350px; margin: 0 auto;">
+    <form th:action="@{/register/customer}" th:object="${signup}" method="post" style="max-width: 350px; margin: 0 auto;">
 
         <div class="border border-secondary p-3 rounded">
             <p></p>
@@ -33,9 +33,7 @@
             <p>
                 <input type="mail" name="mail" class="form-control" placeholder="Mail" required />
             </p>
-            <p>
-                <input type="role" name="Confirm password" class="form-control" placeholder="Role" required />
-            </p>
+
             <p>
                 <input type="submit" value="Register" class="btn btn-primary" />
             </p>
